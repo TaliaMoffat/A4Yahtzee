@@ -2,11 +2,14 @@ import java.util.*;
 
 class Main {
 
-  //static variables
-  Scanner input = new Scanner(System.in);
-  boolean isPlaying = false;
-  boolean validInput = false;
-  int userInt = 0; 
+  //Incase needed: System.out.println("test");
+
+  //variables
+  static Scanner input = new Scanner(System.in);
+  static boolean isPlaying = false;
+  static boolean validInput = false;
+  static int userInt = 0;
+  static boolean idk = true;
 
   public static void welcomeUser(){
     System.out.println("Welcome to our Yahtzee game! We are so excited to play with you, but first you need to answer some questions.");
@@ -19,15 +22,18 @@ class Main {
     System.out.println("That doesn't look right, try again.");
   }
 
-  public void questionOne(){
-    while (validInput = false){
-      System.out.println("Number 1: Do you want to play? Type 1 for yes or 2 for no.");
-      try{
+  public static void checkUserInt(){ //invalid input goes into infinite loop???
+    try{
         userInt = input.nextInt();
-      } catch (NumberFormatException exception){
-          invalidInput();
-          continue;
+      } catch (Exception e){
+        userInt = 0;
       }
+  }
+
+  public static void questionOne(){
+    while (validInput == false){
+      System.out.println("Number 1: Do you want to play? Type 1 for yes or 2 for no.");
+      checkUserInt();
       if (userInt == 1){
         isPlaying = true;
         validInput = true;
@@ -42,7 +48,7 @@ class Main {
     }
   }
 
-  public void questionTwo(){
+  public static void questionTwo(){
     while (validInput = false){
       System.out.println("Number 2: Do you know how to play? Type 1 for yes or 2 for no.");
       try{
@@ -61,6 +67,18 @@ class Main {
         } else if (userInt != 1 && userInt != 2){
           invalidInput();
         }
+    }
+  }
+
+  public static void whoFirst (){
+    System.out.println("Let's roll for it! Me first!");
+    rollDice(5);
+  }
+
+  public static void rollDice(int dice){
+    int[] diceArray = new int [dice];
+    for (int i = 0; i < dice; i++){
+      diceArray[i] = //random num generator
     }
   }
 
