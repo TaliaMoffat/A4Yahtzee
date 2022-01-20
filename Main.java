@@ -10,6 +10,8 @@ class Main {
   static boolean validInput = false;
   static int userInt = 0;
   static boolean idk = true;
+  static Random numGenerator = new Random();
+  static boolean cpuFirst = true;
 
   public static void welcomeUser(){
     System.out.println("Welcome to our Yahtzee game! We are so excited to play with you, but first you need to answer some questions.");
@@ -70,27 +72,82 @@ class Main {
     }
   }
 
-  public static void whoFirst (){
+  public static boolean rollForFirst (){
     System.out.println("Let's roll for it! Me first!");
-    rollDice(5);
+    int[] cpuRoll = rollDice(5);
+    int[] playerRoll = rollDice(5);
+    for (int i = 0; i < 5; i++){
+      System.out.print(cpuRoll[i] + " ");
+    }
+    System.out.println("\nThat's what I got...");
+    for (int j = 0; j < 5; j++){
+      System.out.print(playerRoll[j] + " ");
+    }
+    System.out.println("\nAnd that's your roll!");
+    return whoFirst(cpuRoll, playerRoll);
   }
 
-  public static void rollDice(int dice){
+  public static boolean whoFirst (int[] rollOne, int[] rollTwo){
+    int cpuScore = 0;
+    for (int i = 0; i < 5; i++){
+      cpuScore = cpuScore + rollOne [i];
+    }
+    int playerScore = 0; 
+    for (int j = 0; j < 5; j++){
+      playerScore = playerScore + rollTwo [j];
+    }
+    System.out.println("You got " + playerScore + " and I got " + cpuScore + " so...");
+    if (cpuScore > playerScore){
+      System.out.println("I guess I go first.");
+      return true;
+    } else if (cpuScore == playerScore){
+      System.out.println("it's a tie! You know what, you go first.");
+      return false;
+    } else {
+      System.out.println("I guess you go first.");
+      return false;
+    }
+  }
+
+  public static void printRoll (int[] roll){
+    for (int i = 0; i < roll.length; i++){
+      System.out.print(roll[i] + " ");
+    }
+  }
+
+  public static void turns(boolean cpuFirst){
+    for (int i = 0; i < 13; i++){
+      int[] cpuRoll = rollDice(5);
+      int[] playerRoll = rollDice(5);
+      if (cpuFirst = true){
+        //cpu turn
+        //player turn
+        System.out.println("hi");
+      } else{
+        //player turn
+        //cpu turn
+      }
+
+    }
+  }
+
+  public static int[] rollDice(int dice){
     int[] diceArray = new int [dice];
     for (int i = 0; i < dice; i++){
-      diceArray[i] = //random num generator
+      diceArray[i] = numGenerator.nextInt(6) + 1; 
     }
+    return diceArray;
   }
 
   public static void main(String[] args) {
     welcomeUser();
-    while (isPlaying = true){
-    //call who goes first method
-    //run turns
+    //while (isPlaying = true){
+    cpuFirst = rollForFirst();
+    turns(cpuFirst);
     //call calculating score method?
     //print winner and scores
     //offer another game
-    }
+    //}
     //good bye message
   }
 }
