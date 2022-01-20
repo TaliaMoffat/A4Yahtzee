@@ -151,6 +151,25 @@ class Main {
     return diceArray;
   }
 
+  public static void anotherGame (){
+    System.out.println( TEXT_RESET + "\nWant to play again? Type " + TEXT_RED + "1 for yes" + TEXT_RESET + " or " + TEXT_RED + "2 for no." + TEXT_RESET);
+    int playAgain = input.nextInt();
+    if (playAgain == 2){
+      isPlaying = false;
+    }
+  }
+
+  public static void goodbye (){
+    System.out.println("Well it was nice playing with you, I hope you had fun!");
+    System.out.println("Bye!");
+    try{
+    Thread.sleep(1000);
+    } catch (InterruptedException ex) {
+    Thread.currentThread().interrupt();
+    }
+    System.out.print("\033[H\033[2J");
+  }
+
   public static void main(String[] args) {
     welcomeUser();
     while (isPlaying == true){
@@ -158,14 +177,8 @@ class Main {
       turns(cpuFirst);
       //call calculating score method?
       //print winner and scores
-      //offer another game
-      System.out.println( TEXT_RESET + "\nWant to play again? Type " + TEXT_RED + "1 for yes" + TEXT_RESET + " or " + TEXT_RED + "2 for no." + TEXT_RESET);
-      int playAgain = input.nextInt();
-      if (playAgain == 2){
-        isPlaying = false;
+      anotherGame();
       }
+    goodbye();  
     }
-    //goobye message    
-    System.out.print("\033[H\033[2J");
-  }
 }
