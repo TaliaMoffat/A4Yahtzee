@@ -11,7 +11,10 @@ class Main {
   static int userInt = 0;
   static boolean idk = true;
   static Random numGenerator = new Random();
-  static boolean cpuFirst = true;
+  public static final String TEXT_PURPLE = "\u001B[35m";
+  public static final String TEXT_YELLOW = "\u001B[33m";
+  public static final String TEXT_RED = "\u001B[31m";
+  public static final String TEXT_RESET = "\u001B[0m";
 
   public static void welcomeUser(){
     System.out.println("Welcome to our Yahtzee game! We are so excited to play with you, but first you need to answer some questions.");
@@ -34,7 +37,7 @@ class Main {
 
   public static void questionOne(){
     while (validInput == false){
-      System.out.println("Number 1: Do you want to play? Type 1 for yes or 2 for no.");
+      System.out.println("Number 1: Do you want to play? Type " + TEXT_RED + "1 for yes" + TEXT_RESET + " or " + TEXT_RED + "2 for no." + TEXT_RESET);
       checkUserInt();
       if (userInt == 1){
         isPlaying = true;
@@ -73,13 +76,13 @@ class Main {
   }
 
   public static boolean rollForFirst (){
-    System.out.println("Let's roll for it! Me first!");
+    System.out.println("Let's roll for it!" + TEXT_PURPLE + " Me first!");
     int[] cpuRoll = rollDice(5);
     int[] playerRoll = rollDice(5);
     for (int i = 0; i < 5; i++){
       System.out.print(cpuRoll[i] + " ");
     }
-    System.out.println("\nThat's what I got...");
+    System.out.println("\nThat's what I got..." + TEXT_YELLOW);
     for (int j = 0; j < 5; j++){
       System.out.print(playerRoll[j] + " ");
     }
@@ -96,15 +99,15 @@ class Main {
     for (int j = 0; j < 5; j++){
       playerScore = playerScore + rollTwo [j];
     }
-    System.out.println("You got " + playerScore + " and I got " + cpuScore + " so...");
+    System.out.println("You got " + playerScore + TEXT_RESET + " and " + TEXT_PURPLE + "I got " + cpuScore + " so...");
     if (cpuScore > playerScore){
-      System.out.println("I guess I go first.");
+      System.out.println(TEXT_PURPLE + "I guess I go first.");
       return true;
     } else if (cpuScore == playerScore){
-      System.out.println("it's a tie! You know what, you go first.");
+      System.out.println(TEXT_RESET + "it's a tie! You know what," + TEXT_YELLOW + " you go first.");
       return false;
     } else {
-      System.out.println("I guess you go first.");
+      System.out.println(TEXT_YELLOW + "I guess you go first.");
       return false;
     }
   }
@@ -115,22 +118,29 @@ class Main {
     }
   }
 
-  public static void turns(){
+  public static void turns(boolean compFirst){
     for (int i = 0; i < 13; i++){
       int[] cpuRoll = rollDice(5);
       int[] playerRoll = rollDice(5);
-      if (cpuFirst = true){
-        System.out.println("cpu");
-        //cpu turn
+      if (compFirst == true){
+        cpuTurn(cpuRoll);
       }
-      System.out.println("player");
-        //player turn
-      if (cpuFirst = true){
+        playerTurn(playerRoll);
+      if (compFirst == true){
         continue;
       }
-      System.out.println("cpu");
-        //cpu turn
+        cpuTurn(cpuRoll);
     }
+  }
+
+  public static void cpuTurn(int[] roll){
+    System.out.println( TEXT_PURPLE + "\nOkay here's my roll...");
+    printRoll(roll);
+  }
+
+  public static void playerTurn(int[] roll){
+    System.out.println( TEXT_YELLOW + "\nHere's your roll...");
+    printRoll(roll);
   }
 
   public static int[] rollDice(int dice){
@@ -143,13 +153,19 @@ class Main {
 
   public static void main(String[] args) {
     welcomeUser();
-    //while (isPlaying = true){
-    cpuFirst = rollForFirst();
-    turns();
-    //call calculating score method?
-    //print winner and scores
-    //offer another game
-    //}
-    //good bye message
+    while (isPlaying == true){
+      boolean cpuFirst = rollForFirst();
+      turns(cpuFirst);
+      //call calculating score method?
+      //print winner and scores
+      //offer another game
+      System.out.println( TEXT_RESET + "\nWant to play again? Type " + TEXT_RED + "1 for yes" + TEXT_RESET + " or " + TEXT_RED + "2 for no." + TEXT_RESET);
+      int playAgain = input.nextInt();
+      if (playAgain == 2){
+        isPlaying = false;
+      }
+    }
+    //goobye message    
+    System.out.print("\033[H\033[2J");
   }
 }
