@@ -163,7 +163,7 @@ class Main {
     System.out.println("Well it was nice playing with you, I hope you had fun!");
     System.out.println("Bye!");
     try{
-    Thread.sleep(1000);
+    Thread.sleep(5000);
     } catch (InterruptedException ex) {
     Thread.currentThread().interrupt();
     }
