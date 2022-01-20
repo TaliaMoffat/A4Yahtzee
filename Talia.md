@@ -1,6 +1,6 @@
-# Notes on methods
-## Welcome user method
-* greeting
-* call questions
-  * Q1 wanna play?
-  * Q2 know how to?
+# Talia's Notes
+* add method explaining rules
+* valid input still an issue (endless loop)
+* still need to do Q2 
+* turns method not working
+* changing static booleans?

@@ -115,19 +115,21 @@ class Main {
     }
   }
 
-  public static void turns(boolean cpuFirst){
+  public static void turns(){
     for (int i = 0; i < 13; i++){
       int[] cpuRoll = rollDice(5);
       int[] playerRoll = rollDice(5);
       if (cpuFirst = true){
-        //cpu turn
-        //player turn
-        System.out.println("hi");
-      } else{
-        //player turn
+        System.out.println("cpu");
         //cpu turn
       }
-
+      System.out.println("player");
+        //player turn
+      if (cpuFirst = true){
+        continue;
+      }
+      System.out.println("cpu");
+        //cpu turn
     }
   }
 
@@ -143,7 +145,7 @@ class Main {
     welcomeUser();
     //while (isPlaying = true){
     cpuFirst = rollForFirst();
-    turns(cpuFirst);
+    turns();
     //call calculating score method?
     //print winner and scores
     //offer another game
