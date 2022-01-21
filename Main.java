@@ -1,3 +1,8 @@
+/*Yahtzee 
+Talia Moffat
+Jan. 19th - Jan. __, 2022
+CPU vs. User Yahtzee game.*/
+
 import java.util.*;
 
 class Main {
@@ -214,8 +219,20 @@ class Main {
     int usedRerolls = 0;
     yahtzeeCheck(roll);
     reroll(usedRerolls, roll);
-    //scoring method
+    playerScoreSheet();
   }
+
+  public static void playerScoreSheet(){
+    String[] scores = {"UPPER SECTION", "Aces\t\t", "Twos\t\t", "Threes\t\t", "Fours\t\t", "Fives\t\t", "Sixes\t\t", "TOTAL SCORE", "BONUS\t\t", "TOTAL\t\t", "LOWER SECTION", "3 of a kind", "4 of a kind", "Full House\t", "Small Straight", "Large Straight", "YAHTZEE\t", "Chance\t\t", "YAHTZEE BONUS", "TOTAL - Lower", "TOTAL - Upper", "GRAND TOTAL"};
+
+    for (int i = 0; i < scores.length; i++){
+      System.out.println("+-----------------");
+      System.out.println("|" + scores[i] + "\t|");
+    }
+    System.out.println("+-----------------");
+  }
+
+  //Write special scoring somewhere
 
   public static void reroll(int used, int[] roll){
     while (used < 3){
@@ -225,14 +242,17 @@ class Main {
       if (userInt == 1){
         rerollDice(roll);
         used++;
+      } else if (userInt == 2){
+        used = 3;
       }
     }
+    System.out.print("\033[H\033[2J");
     printRoll(roll);
-    System.out.println("\n\nHere's your final roll.");
+    System.out.println("\n\nHere's your final roll.\n\n");
   }
 
   public static void rerollDice(int[] roll){
-    System.out.println("\nWhich dice do you want to reroll? \nTo select a die, type the value on the die and press enter. \nWrite 7 to stop selecting dice.\n");
+    System.out.println("\nWhich dice do you want to reroll? \nTo select a die, type the value on the die and press enter. \nWrite 7 to stop selecting dice.\n" + TEXT_YELLOW);
     int i = 0;
     int[] reroll = new int[5];
     validIn = true;

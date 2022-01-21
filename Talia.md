@@ -4,3 +4,4 @@
 * scoring
 * score sheet
 * AI
+* fix "you have 1 rerolls left"
