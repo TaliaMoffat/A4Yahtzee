@@ -6,10 +6,12 @@ class Main {
 
   //variables
   static Scanner input = new Scanner(System.in);
+  static boolean isYahtzee = false;
   static boolean isPlaying = false;
   static boolean validInput = false;
+  static boolean hasPlayed = false;
   static int userInt = 0;
-  static boolean idk = true;
+  static boolean validIn = false;
   static Random numGenerator = new Random();
   public static final String TEXT_PURPLE = "\u001B[35m";
   public static final String TEXT_YELLOW = "\u001B[33m";
@@ -17,10 +19,14 @@ class Main {
   public static final String TEXT_RESET = "\u001B[0m";
 
   public static void welcomeUser(){
-    System.out.println("Welcome to our Yahtzee game! We are so excited to play with you, but first you need to answer some questions.");
+    System.out.println("\nWelcome to our Yahtzee game! We are so excited to play with you, but first you need to answer some questions.");
     questionOne();
+    validInput = false;
+    validIn = false;
     questionTwo();
-    System.out.println("Okay! Let's play!");
+    if (isPlaying == true){
+      System.out.println("\nOkay! Let's play!");
+    }
   }
 
   public static void invalidInput(){
@@ -30,23 +36,29 @@ class Main {
   public static void checkUserInt(){ //invalid input goes into infinite loop???
     try{
         userInt = input.nextInt();
+        validIn = true;
       } catch (Exception e){
         userInt = 0;
+        validIn = false;
+        System.out.println("That doesn't look right, try again.");
+      }
+      if (userInt == 7){
+        validIn =  false;
       }
   }
 
   public static void questionOne(){
     while (validInput == false){
-      System.out.println("Number 1: Do you want to play? Type " + TEXT_RED + "1 for yes" + TEXT_RESET + " or " + TEXT_RED + "2 for no." + TEXT_RESET);
-      checkUserInt();
+      while (validIn == false){
+        System.out.println("\nNumber 1: Do you want to play?");
+        yesOrNo();
+      }
       if (userInt == 1){
         isPlaying = true;
         validInput = true;
         break;
         } else if (userInt == 2){
-          isPlaying = false;
-          validInput = true;
-          break;
+          goodbye();
         } else if (userInt != 1 && userInt != 2){
           invalidInput();
         }
@@ -54,20 +66,17 @@ class Main {
   }
 
   public static void questionTwo(){
-    while (validInput = false){
-      System.out.println("Number 2: Do you know how to play? Type 1 for yes or 2 for no.");
-      try{
-        userInt = input.nextInt();
-      } catch (NumberFormatException exception){
-          invalidInput();
-          continue;
+    while (validInput == false){
+      while (validIn == false){
+        System.out.println("\nNumber 2: Do you know how to play?");
+        yesOrNo();
       }
       if (userInt == 1){
         validInput = true;
         break;
         } else if (userInt == 2){
+          //call rules
           validInput = true;
-          //call rules method
           break;
         } else if (userInt != 1 && userInt != 2){
           invalidInput();
@@ -75,17 +84,18 @@ class Main {
     }
   }
 
+  public static void yesOrNo(){
+    System.out.println( TEXT_RESET + "\nType " + TEXT_RED + "1 for yes" + TEXT_RESET + " or " + TEXT_RED + "2 for no.\n" + TEXT_RESET);
+    checkUserInt();
+  }
+
   public static boolean rollForFirst (){
-    System.out.println("Let's roll for it!" + TEXT_PURPLE + " Me first!");
+    System.out.println("Let's roll for it!" + TEXT_PURPLE + "\nMe first!");
     int[] cpuRoll = rollDice(5);
     int[] playerRoll = rollDice(5);
-    for (int i = 0; i < 5; i++){
-      System.out.print(cpuRoll[i] + " ");
-    }
+    printRoll(cpuRoll);
     System.out.println("\nThat's what I got..." + TEXT_YELLOW);
-    for (int j = 0; j < 5; j++){
-      System.out.print(playerRoll[j] + " ");
-    }
+    printRoll(playerRoll);
     System.out.println("\nAnd that's your roll!");
     return whoFirst(cpuRoll, playerRoll);
   }
@@ -113,8 +123,67 @@ class Main {
   }
 
   public static void printRoll (int[] roll){
+    asciiArt(roll);
     for (int i = 0; i < roll.length; i++){
       System.out.print(roll[i] + " ");
+    }
+  }
+
+  public static void asciiArt(int[] roll){
+    for (int i = 0; i < roll.length; i++){
+      System.out.println("\n+---------+");
+      switch (roll[i]){
+        case 1:
+          System.out.println("|         |");
+          System.out.println("|    o    |");
+          System.out.println("|	      |");
+          break;
+
+        case 2:
+          System.out.println("| o       |");
+          System.out.println("|         |");
+          System.out.println("|	    o |");
+          break;
+
+        case 3:
+          System.out.println("| o       |");
+          System.out.println("|    o    |");
+          System.out.println("|	    o |");
+          break;
+        
+        case 4:
+          System.out.println("| o     o |");
+          System.out.println("|         |");
+          System.out.println("| o     o |");
+          break;
+
+        case 5:
+          System.out.println("| o     o |");
+          System.out.println("|    o    |");
+          System.out.println("| o     o |");
+          break;
+
+        case 6:
+          System.out.println("| o     o |");
+          System.out.println("| o     o |");
+          System.out.println("| o     o |");
+          break;
+      }
+      System.out.println("+---------+");
+    }
+  }
+
+  public static void yahtzeeCheck(int[] roll){
+    for (int i = 1; i < roll.length; i++){
+      if (roll[i] == roll[i - 1]){
+        isYahtzee = true;
+      } else {
+        isYahtzee = false; 
+        break;
+      }
+    }
+    if (isYahtzee == true){
+      System.out.println(TEXT_RED + "\n\nYAHTZEE!");
     }
   }
 
@@ -136,11 +205,57 @@ class Main {
   public static void cpuTurn(int[] roll){
     System.out.println( TEXT_PURPLE + "\nOkay here's my roll...");
     printRoll(roll);
+    yahtzeeCheck(roll);
   }
 
   public static void playerTurn(int[] roll){
     System.out.println( TEXT_YELLOW + "\nHere's your roll...");
     printRoll(roll);
+    int usedRerolls = 0;
+    yahtzeeCheck(roll);
+    reroll(usedRerolls, roll);
+    //scoring method
+  }
+
+  public static void reroll(int used, int[] roll){
+    while (used < 3){
+      System.out.println("\n\nYou have " + (3 - used) + " rerolls left.");
+      System.out.println("\nDo you want to reroll?");
+      yesOrNo();
+      if (userInt == 1){
+        rerollDice(roll);
+        used++;
+      }
+    }
+    printRoll(roll);
+    System.out.println("\n\nHere's your final roll.");
+  }
+
+  public static void rerollDice(int[] roll){
+    System.out.println("\nWhich dice do you want to reroll? \nTo select a die, type the value on the die and press enter. \nWrite 7 to stop selecting dice.\n");
+    int i = 0;
+    int[] reroll = new int[5];
+    validIn = true;
+    while (validIn == true){
+      checkUserInt();
+      if(validIn == false){
+        break;
+      }
+      reroll[i] = userInt;
+      i++;
+    }
+    for (int j = 0; j < 5; j++){
+      for (int k = 0; k < 5; k++){
+        if (reroll[j] == roll[k]){
+          int l = numGenerator.nextInt(6) + 1; 
+          roll[k] = l;
+          reroll[j] = 0;
+        }
+      }
+    }
+    System.out.print(TEXT_YELLOW);
+    printRoll(roll);
+    System.out.println("\nHere's your new role");
   }
 
   public static int[] rollDice(int dice){
@@ -152,7 +267,8 @@ class Main {
   }
 
   public static void anotherGame (){
-    System.out.println( TEXT_RESET + "\nWant to play again? Type " + TEXT_RED + "1 for yes" + TEXT_RESET + " or " + TEXT_RED + "2 for no." + TEXT_RESET);
+    System.out.println( TEXT_RESET + "\nWant to play again?");
+    yesOrNo();
     int playAgain = input.nextInt();
     if (playAgain == 2){
       isPlaying = false;
@@ -160,7 +276,11 @@ class Main {
   }
 
   public static void goodbye (){
-    System.out.println("Well it was nice playing with you, I hope you had fun!");
+    if (hasPlayed == true){
+      System.out.println("\nWell it was nice playing with you, I hope you had fun!");
+    } else {
+      System.out.println("\nMaybe next time then!");
+    }
     System.out.println("Bye!");
     try{
     Thread.sleep(5000);
@@ -168,11 +288,13 @@ class Main {
     Thread.currentThread().interrupt();
     }
     System.out.print("\033[H\033[2J");
+    System.exit(0);
   }
 
   public static void main(String[] args) {
     welcomeUser();
     while (isPlaying == true){
+      hasPlayed = true;
       boolean cpuFirst = rollForFirst();
       turns(cpuFirst);
       //call calculating score method?
