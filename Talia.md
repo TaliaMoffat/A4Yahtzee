@@ -1,7 +1,8 @@
 # Talia's Notes
 * add method explaining rules
-* valid input still an issue (endless loop)
+* add comments on all curly brackets
 * scoring
-* score sheet
-* AI
+* add lower section
+* fix cpu turn
 * fix "you have 1 rerolls left"
+* clean up use of validInput boolean variable
