@@ -11,17 +11,25 @@ class Main {
 
   //variables
   static Scanner input = new Scanner(System.in);
+  static Random numGenerator = new Random();
+  public static final String TEXT_PURPLE = "\u001B[35m";
+  public static final String TEXT_YELLOW = "\u001B[33m";
+  public static final String TEXT_RED = "\u001B[31m";
+  public static final String TEXT_RESET = "\u001B[0m";
+
   static boolean isYahtzee = false;
   static boolean isPlaying = false;
   static boolean validInput = false;
   static boolean hasPlayed = false;
   static int userInt = 0;
   static boolean validIn = false;
-  static Random numGenerator = new Random();
-  public static final String TEXT_PURPLE = "\u001B[35m";
-  public static final String TEXT_YELLOW = "\u001B[33m";
-  public static final String TEXT_RED = "\u001B[31m";
-  public static final String TEXT_RESET = "\u001B[0m";
+
+  static String[] sections = {"UPPER SECTION", "Aces\t\t", "Twos\t\t", "Threes\t\t", "Fours\t\t", "Fives\t\t", "Sixes\t\t", "TOTAL SCORE", "BONUS\t\t", "TOTAL\t\t", "LOWER SECTION", "3 of a kind", "4 of a kind", "Full House\t", "Small Straight", "Large Straight", "YAHTZEE\t", "Chance\t\t", "YAHTZEE BONUS", "TOTAL - Lower", "TOTAL - Upper", "GRAND TOTAL"};
+
+  static String[] playerScore = {"", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
+  static String[] cpuScore = {"", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"};
+  static String[] playerUsed = {"", "1", "2", "3", "4", "5", "6", "", "", "", "", "7", "8", "9", "10", "11", "12", "13", "", "", "", ""};
+  static String[] cpuUsed = {"", "1", "2", "3", "4", "5", "6", "", "", "", "", "7", "8", "9", "10", "11", "12", "13", "", "", "", ""};
 
   public static void welcomeUser(){
     System.out.println("\nWelcome to our Yahtzee game! We are so excited to play with you, but first you need to answer some questions.");
@@ -30,7 +38,7 @@ class Main {
     validIn = false;
     questionTwo();
     if (isPlaying == true){
-      System.out.println("\nOkay! Let's play!");
+      System.out.println("\nOkay! Let's play!"); //clear?
     }
   }
 
@@ -80,7 +88,7 @@ class Main {
         validInput = true;
         break;
         } else if (userInt == 2){
-          //call rules
+          //add rules
           validInput = true;
           break;
         } else if (userInt != 1 && userInt != 2){
@@ -117,12 +125,15 @@ class Main {
     System.out.println("You got " + playerScore + TEXT_RESET + " and " + TEXT_PURPLE + "I got " + cpuScore + " so...");
     if (cpuScore > playerScore){
       System.out.println(TEXT_PURPLE + "I guess I go first.");
+      System.out.print("\033[H\033[2J");
       return true;
     } else if (cpuScore == playerScore){
       System.out.println(TEXT_RESET + "it's a tie! You know what," + TEXT_YELLOW + " you go first.");
+      System.out.print("\033[H\033[2J");
       return false;
     } else {
       System.out.println(TEXT_YELLOW + "I guess you go first.");
+      System.out.print("\033[H\033[2J");
       return false;
     }
   }
@@ -220,19 +231,63 @@ class Main {
     yahtzeeCheck(roll);
     reroll(usedRerolls, roll);
     playerScoreSheet();
+    slotToUse(roll);
   }
 
   public static void playerScoreSheet(){
-    String[] scores = {"UPPER SECTION", "Aces\t\t", "Twos\t\t", "Threes\t\t", "Fours\t\t", "Fives\t\t", "Sixes\t\t", "TOTAL SCORE", "BONUS\t\t", "TOTAL\t\t", "LOWER SECTION", "3 of a kind", "4 of a kind", "Full House\t", "Small Straight", "Large Straight", "YAHTZEE\t", "Chance\t\t", "YAHTZEE BONUS", "TOTAL - Lower", "TOTAL - Upper", "GRAND TOTAL"};
-
-    for (int i = 0; i < scores.length; i++){
+    for (int i = 0; i < 10; i++) { //scores.length
       System.out.println("+-----------------");
-      System.out.println("|" + scores[i] + "\t|");
+      System.out.println("|" + sections[i] + "\t" + TEXT_RED + playerUsed[i] + TEXT_RESET + "\t|\t" + playerScore[i]);
     }
     System.out.println("+-----------------");
   }
 
-  //Write special scoring somewhere
+  public static void slotToUse(int[] roll){
+    boolean usedAlready = true;
+    while (usedAlready == true) {
+    System.out.println("Type the number (red) for the slot you want to use.");
+    checkUserInt();
+    if (playerScore[userInt] != "-"){
+      usedAlready = true;
+      System.out.println("You already used this section.");
+      continue;
+    } else {
+      usedAlready = false;
+    }
+    }
+    int score = 0;
+     for (int i = 0; i < 5; i++){
+      if (roll[i] == userInt){
+        score = score + userInt;
+      }
+      playerScore[userInt] = String.valueOf(score);
+    }
+    System.out.println("You have a score of " + playerScore[userInt] + " for the " + sections[userInt] + " section on your player sheet now!");
+    playerUsed[userInt] = "";
+  }
+
+    /*switch (userInt) {
+      case 1: aces(roll);
+              break;
+      case 2: 
+      case 3:
+      case 4:
+      case 5:
+      case 6:
+    }
+  }
+
+  public static void aces(int[] roll){
+    int acesScore = 0; //move elsewhere?
+    for (int i = 0; i < 5; i++){
+      if (roll[i] == 1){
+        acesScore++;
+      }
+      playerScore[1] = String.valueOf(acesScore);
+      System.out.println("You have a score of " + acesScore + " for the aces section on your player sheet now!");
+    }
+
+  } */
 
   public static void reroll(int used, int[] roll){
     while (used < 3){
