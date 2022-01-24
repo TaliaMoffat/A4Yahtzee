@@ -26,6 +26,9 @@ class Main {
   //static int for user input
   static int userInt = 0;
 
+  //test
+  static int cpuKeep = -1;
+
   //sections on score sheet for output (move to a score sheet method?)
   static String[] sections = {"UPPER SECTION", "Aces\t\t", "Twos\t\t", "Threes\t\t", "Fours\t\t", "Fives\t\t", "Sixes\t\t", "TOTAL SCORE", "BONUS\t\t", "TOTAL\t\t", "LOWER SECTION", "3 of a kind", "4 of a kind", "Full House\t", "Small Straight", "Large Straight", "YAHTZEE\t", "Chance\t\t", "YAHTZEE BONUS", "TOTAL - Lower", "TOTAL - Upper", "GRAND TOTAL"};
 
@@ -42,18 +45,18 @@ class Main {
     questionOne(); //call question 1
     validInput = false; //reset boolean
     questionTwo(); //call question 2
-    System.out.println("\nOkay! Let's play!"); 
-    clear(2000); //call clear console method
+    System.out.println("\nOkay! Let's play!\n"); 
+    //clear(2000); //call clear console method
     }
 
-  public static void clear(int wait){ //clears console (keep it tidy)
+  /*public static void clear(int wait){ //clears console (keep it tidy)
     try{
     Thread.sleep(wait); //wait given number of milliseconds
     } catch (InterruptedException ex) {
     Thread.currentThread().interrupt();
     }
     System.out.print("\033[H\033[2J"); //clear
-  }
+  }*/
 
   public static void invalidInput(){ //tells user they have invalid input
     System.out.println("\nThat doesn't look right, try again.");
@@ -117,13 +120,13 @@ class Main {
   }
 
   public static boolean rollForFirst (){ //find who goes first by usual game rules
-    System.out.println("Let's roll for it!" + TEXT_PURPLE + "\nI'll roll first!");
+    System.out.println("Let's roll for it!" + TEXT_PURPLE + "\n\nI'll roll first!\n");
     int[] cpuRoll = rollDice(5); //call roll dice with 5 dice for both cpu and player
     int[] playerRoll = rollDice(5);
     printRoll(cpuRoll); //prints rolls
-    System.out.println("\nThat's what I got..." + TEXT_YELLOW);
+    System.out.println("That's what I got...\n" + TEXT_YELLOW);
     printRoll(playerRoll);
-    System.out.println("\nAnd that's your roll!");
+    System.out.println("And that's your roll!\n");
     return whoFirst(cpuRoll, playerRoll); //calls method for scores/values and who goes
   }
 
@@ -136,7 +139,7 @@ class Main {
     for (int j = 0; j < 5; j++){ //add up dice
       playerScore = playerScore + rollTwo [j];
     }
-    System.out.println("You got " + playerScore + TEXT_RESET + " and " + TEXT_PURPLE + "I got " + cpuScore + " so..."); //prints scores
+    System.out.println("You got " + playerScore + TEXT_RESET + " and " + TEXT_PURPLE + "I got " + cpuScore + " so...\n"); //prints scores
     if (cpuScore > playerScore){ //prints winner (of who goes first)
       System.out.println(TEXT_PURPLE + "I guess I go first.");
       return true;
@@ -154,11 +157,12 @@ class Main {
     for (int i = 0; i < roll.length; i++){ //prints dice values
       System.out.print(roll[i] + " "); 
     }
+    System.out.println("\n");
   }
 
   public static void asciiArt(int[] roll){ //prints the ascii art for any die
     for (int i = 0; i < roll.length; i++){
-      System.out.println("\n+---------+"); //top of die
+      System.out.println("+---------+"); //top of die
       switch (roll[i]){ 
         case 1: //prints a die showing 1
           System.out.println("|         |");
@@ -196,7 +200,7 @@ class Main {
           System.out.println("| o     o |");
           break;
       }
-      System.out.println("+---------+"); //bottom of die
+      System.out.println("+---------+\n"); //bottom of die
     }
   }
 
@@ -238,24 +242,23 @@ class Main {
   }
 
   public static void cpuReroll(int[] roll){
-    int[] occurences = new int[6];
-    int cpuKeep = 1;
     int rerollsUsed = 0;
     int score = 0;
+    cpuKeep = -1;
     while (rerollsUsed < 3){
+      int[] occurences = new int[6];
       for (int i = 0; i < 5; i++){
-        for (int j = 1; j <= 6; j++){
-          if (roll[i] == j){
-            occurences[j-1]++;
-          }
-        }
-      }
+        occurences[roll[i] - 1]++;
+      }    
       for (int k = 0; k < 6; k++){
         if (occurences[k] == 5){
           rerollsUsed = 3;
+          break;
         }
-        if (occurences[k] > occurences[cpuKeep - 1] && cpuScore[k+1] != "-"){
-          cpuKeep = k + 1;
+        if (cpuKeep < 0 || occurences[k] > occurences[cpuKeep - 1]){
+          if (cpuScore[k + 1] == "-"){
+            cpuKeep = k + 1;
+          }
         }
       }
       for (int l = 0; l < 5; l++){
@@ -269,9 +272,8 @@ class Main {
     if (roll[i] == cpuKeep){
       score = score + cpuKeep;
     }
-  }  
+  } 
   cpuScore[cpuKeep] = String.valueOf(score);
-  printScoreSheet(cpuUsed, cpuScore);
 }
 
 
@@ -286,11 +288,12 @@ class Main {
   }
 
   public static void printScoreSheet(String[] used, String[] score){
-    for (int i = 0; i < 10; i++) { //sections.length eventually 
-      System.out.println("+-----------------");
+    System.out.println("\n");
+    for (int i = 0; i < 8; i++) { //sections.length eventually 
+      System.out.println(TEXT_RESET + "+---------------------------");
       System.out.println("|" + sections[i] + "\t" + TEXT_RED + used[i] + TEXT_RESET + "\t|\t" + score[i]);
       }
-    System.out.println("+-----------------");
+    System.out.println("+---------------------------");
   }
 
   public static void totalUpperSection (){
@@ -300,14 +303,15 @@ class Main {
       playerScoreCount += Integer.parseInt(playerScore[i]);
       cpuScoreCount += Integer.parseInt(cpuScore[i]);
     }
-    playerScore[8] = String.valueOf(playerScoreCount);
-    cpuScore[8] = String.valueOf(cpuScoreCount);
+    playerScore[7] = String.valueOf(playerScoreCount);
+    cpuScore[7] = String.valueOf(cpuScoreCount);
   }
 
   public static void slotToUse(int[] roll){
+    String[] sectionsSlots = {"aces", "twos", "threes", "fours", "fives", "sixes"};
     boolean usedAlready = true;
     while (usedAlready == true) {
-    System.out.println("Type the number (red) for the slot you want to use.");
+    System.out.println("\nType the number " + TEXT_RED + "(red)"+ TEXT_RESET+ " for the slot you want to use.\n");
     checkUserInt();
     if (playerScore[userInt] != "-"){
       usedAlready = true;
@@ -324,14 +328,14 @@ class Main {
       }
       playerScore[userInt] = String.valueOf(score);
     }
-    System.out.println("You have a score of " + playerScore[userInt] + " for the " + sections[userInt] + " section on your player sheet now!");
+    System.out.println("\nYou have a score of " + playerScore[userInt] + " for the " + sectionsSlots[userInt - 1] + " section on your player sheet now!");
     playerUsed[userInt] = "";
   }
 
   public static void reroll(int used, int[] roll){
     while (used < 3){
-      System.out.println("\n\nYou have " + (3 - used) + " rerolls left.");
-      System.out.println("\nDo you want to reroll?");
+      System.out.println("You have " + (3 - used) + " rerolls left.");
+      System.out.println(TEXT_RESET + "\nDo you want to reroll?");
       yesOrNo();
       if (userInt == 1){
         rerollDice(roll);
@@ -340,13 +344,14 @@ class Main {
         used = 3;
       }
     }
-    clear(2000);
+    //clear(2000);
+    System.out.println("\nHere's your final roll.\n");
     printRoll(roll);
-    System.out.println("\n\nHere's your final roll.\n\n");
+    
   }
 
   public static void rerollDice(int[] roll){
-    System.out.println("\nWhich dice do you want to reroll? \nTo select a die, type the value on the die and press enter. \nWrite a number higher than 6 to stop selecting dice.\n" + TEXT_YELLOW);
+    System.out.println("\nWhich di(c)e do you want to reroll? \n\n" + TEXT_RED + "To select a die, type the value on the die and press enter. \n\nEnter a number higher than 6 to stop selecting dice.\n" + TEXT_YELLOW);
     int[] reroll = new int[5];
     for (int i = 0; i < 5; i++){
       checkUserInt();
@@ -380,7 +385,7 @@ class Main {
   public static void printWinner (){
     int cpu = Integer.parseInt(cpuScore[8]);
     int player = Integer.parseInt(playerScore[8]);
-    System.out.println("My total score was " + cpu + " and your total score was " + player + "so that means...");
+    System.out.println("My total score was " + cpu + " and your total score was " + player + " so that means...");
     if (cpu > player){
       System.out.println("I won!");
     } else {
@@ -403,7 +408,7 @@ class Main {
       System.out.println("\nMaybe next time then!");
     }
     System.out.println("Bye!");
-    clear(5000);
+    //clear(5000);
     System.exit(0);
   }
 
@@ -412,7 +417,7 @@ class Main {
     while (isPlaying == true){
       hasPlayed = true;
       boolean cpuFirst = rollForFirst();
-      clear(3000);
+      //clear(3000);
       turns(cpuFirst);
       totalUpperSection();
       printScoreSheet (cpuUsed, cpuScore);
